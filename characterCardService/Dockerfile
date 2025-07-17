@@ -8,5 +8,6 @@ RUN mkdir -p /app/
 RUN mkdir -p /app/logs/
 COPY target/characterCardService-0.0.1-SNAPSHOT.jar /characterCardService-0.0.1-SNAPSHOT.jar
 
+
 # /app/app.jar
 ENTRYPOINT ["java", "-jar", "/characterCardService-0.0.1-SNAPSHOT.jar"]
