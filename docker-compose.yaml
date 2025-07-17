@@ -1,0 +1,52 @@
+services:
+  card-character-db:
+    container_name: card-character-db
+    build:
+      context: ./cardCharacterDB
+      dockerfile: Dockerfile
+    volumes:
+      - card_character_data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
+      MYSQL_DATABASE: CARD_CHARACTER_DB
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQLDialect
+    networks:
+      - card-network
+  card-character-service:
+    depends_on:
+      - card-character-db
+    container_name: card-character-service
+    build:
+      context: ./characterCardService
+      dockerfile: Dockerfile
+    ports:
+      - 8083:8083
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://card-character-db:3306/CARD_CHARACTER_DB
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQLDialect
+      # SPRING_DATASOURCE_URL: jdbc:mysql://card-character-db:3306/CARD_CHARACTER_DB
+      # SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      # SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQLDialect
+      # MYSQL_ROOT_PASSWORD: root
+      # MYSQL_USER: user
+      # MYSQL_PASSWORD: user
+      # MYSQL_DATABASE: CARD_CHARACTER_DB
+    networks:
+      - card-network
+
+volumes:
+  card_character_data:
+  
+networks:
+  card-network:
+    driver: bridge
+
+
+  
